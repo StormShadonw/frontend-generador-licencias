@@ -1,0 +1,49 @@
+.newUserPage {
+    display: -webkit-flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 90%;
+    flex-direction: column;
+}
+
+.button-secondary {
+    background: rgb(66, 184, 221);
+}
+
+#addAppsButton {
+    color: white;
+}
+
+.pure-control-group.appsButton {
+  text-align: end;
+}
+
+.appsActionsButton {
+    width: 25px;
+    /* margin-left: 5px;
+    margin-right: 5px; */
+    transition: all 0.6s ease;
+}
+
+.pure-button {
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.appsActionsButton:hover {
+  transform: scale(1.2);
+}
+
+#addAppsButton img {
+  width: 15px;
+}
+
+.final-pure-control-group {
+  text-align: center;
+}
+
+.actionsButtons {
+  display: -webkit-flex;
+  justify-content: space-around;
+  align-items: center;
+}

@@ -1,0 +1,23 @@
+.menuMovil {
+    width: 60px;
+    height: 50px;
+    margin-left: 5px;
+    margin-right: 15px;
+    background-color: #10313c;
+    border-radius: 10px;
+    position: relative;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.menuMovil span {
+    width: 70%;
+    height: 5px;
+    background-color: #ffffffcc;
+    border-radius: 30px;
+}   

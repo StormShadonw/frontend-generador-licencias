@@ -1,0 +1,26 @@
+.side-menu-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60%;
+    height: 100%;
+    display: -webkit-flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: wrap;
+    flex-direction: column;
+    background-color: #2e606f;
+    box-shadow: 2px 0px 2px #00000063;
+    box-sizing: border-box;
+    padding-bottom: 200px;
+    padding-top: 200px;
+    z-index: 2;
+}
+
+.side-menu-panel .navLinks {
+    flex-direction: column;
+}
+
+/* .side-menu-panel .navLink {
+    color: black;
+} */

@@ -1,0 +1,212 @@
+.usersPage {
+    width: 95%;
+    left: 0;
+    right: 0;
+    margin: auto;
+    display: -webkit-flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-flow: wrap;
+    flex-direction: column;
+}
+
+h2 {
+    text-align: left;
+    margin: 0;
+    color: #454ea5;
+    font-size: 32px;
+}
+
+.users {
+    width: 90%;
+    left: 0;
+    right: 0;
+    margin: auto;
+    display: -webkit-flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-flow: wrap;
+    margin-top: 25px;
+}
+
+.Usuario {
+    width: 260px;
+    display: -webkit-flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: wrap;
+    /* margin: 5px; */
+    color: black;
+    box-sizing: border-box;
+    padding: 10px;
+    position: relative;
+    height: 170px;
+    background-color: white;
+    border: 2px solid #2F6F53;
+    background: #95D3B8;
+    color: white;
+    border-radius: 4px;
+}
+
+.user_content {
+    width: 95%;
+    height: 85%;
+    display: -webkit-flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-flow: wrap;
+    flex-direction: column;
+    /* color: #454ea5; */
+    font-weight: bold;
+    text-align: left;
+}
+
+.user_content p {
+    margin: 0;
+}
+
+.user_actions {
+    width: 100%;
+    height: 15%;
+    display: -webkit-flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.user_actions button {
+    margin-left: 5px;
+    margin-right: 5px;
+    background-color: transparent;
+    border: none;
+    font-size: 12px;
+    background-color: #454EA5;
+    border-radius: 5px;
+    padding: 7px;
+    color: white;
+    outline: none;
+}
+
+/* .Usuario::after {
+    width: 95%;
+    background-color: red;
+    height: 90%;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    border: 2px solid black;
+    pointer-events: none;
+} */
+
+.cargando {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    height: 20%;
+    width: 20%;
+
+}
+
+.lds-ellipsis {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+  }
+  .lds-ellipsis div {
+    position: absolute;
+    top: 33px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: #2E606F;
+    animation-timing-function: cubic-bezier(0, 1, 1, 0);
+  }
+  .lds-ellipsis div:nth-child(1) {
+    left: 8px;
+    animation: lds-ellipsis1 0.6s infinite;
+  }
+  .lds-ellipsis div:nth-child(2) {
+    left: 8px;
+    animation: lds-ellipsis2 0.6s infinite;
+  }
+  .lds-ellipsis div:nth-child(3) {
+    left: 32px;
+    animation: lds-ellipsis2 0.6s infinite;
+  }
+  .lds-ellipsis div:nth-child(4) {
+    left: 56px;
+    animation: lds-ellipsis3 0.6s infinite;
+  }
+  @keyframes lds-ellipsis1 {
+    0% {
+      transform: scale(0);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  @keyframes lds-ellipsis3 {
+    0% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(0);
+    }
+  }
+  @keyframes lds-ellipsis2 {
+    0% {
+      transform: translate(0, 0);
+    }
+    100% {
+      transform: translate(24px, 0);
+    }
+  }
+  
+
+  .add_user {
+    width: 95%;
+    display: -webkit-flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-flow: wrap;
+}
+
+.add_user button {
+    background-color: transparent;
+    border: none;
+    font-size: 62px;
+    color: #454ea5;
+    text-shadow: 2px 2px 2px #0000009e;
+    outline: none;
+}
+
+.usersActionsButton:hover {
+  transform: scale(1.2);
+}
+
+.usersActionsButton {
+  width: 25px;
+  /* margin-left: 5px;
+  margin-right: 5px; */
+  transition: all 0.6s ease;
+}
+
+.searchUsers {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.table {
+  width: 100%;
+}
+
+.inputSearch {
+  margin-left: 5px;
+}

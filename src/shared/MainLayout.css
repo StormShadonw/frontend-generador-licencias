@@ -1,0 +1,17 @@
+.background2 {
+    background: #EDF5F8;
+}
+
+.MainLayout {
+    width: 100%;
+    display: -webkit-flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-flow: wrap;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    padding-top:100px;
+}
