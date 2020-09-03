@@ -1,22 +1,12 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { CSSTransition } from 'react-transition-group';
-
 
 import './newUser.css';
-import Modal from '../shared/Modal';
-import BackgroundShadow from '../shared/backgroundShadow';
-import EditButton from '../assets/edit-button.png';
-import DeleteButton from '../assets/delete-button.png';
-import AddButton from '../assets/add-button.png';
+import APISERVER from "../../src/config";
 
-// const API = "http://localhost:2020/users/";
-
-let rolesAPI = "http://localhost:2020/roles/";
+let rolesAPI = APISERVER + "roles/";
 
 class newUser extends React.Component {
-
-
     constructor(props) {
         super(props);
         this.state = {
@@ -75,100 +65,6 @@ class newUser extends React.Component {
         })
     }
 
-    setAppShortName = (e) => {
-        this.setState({
-            appShortName: e.target.value
-        })
-    }
-
-    setAppID = (e) => {
-        this.setState({
-            appID: e.target.value
-        })
-    }
-
-    setAppName = (e) => {
-        this.setState({
-            appTitle: e.target.value
-        })
-    }
-
-    setAppDescription = (e) => {
-        this.setState({
-            appDescription: e.target.value
-        })
-    }
-
-    addAppHandler = (e) => {
-        e.preventDefault();
-        this.setState({
-            showModalAddApp: true,
-            appDescription: "",
-            appTitle: "",
-            appShortName: ""
-        });
-    }
-
-    addApp = () => {
-
-        if (this.state.appTitle.length === 0 || this.state.appDescription.length === 0 || this.state.appShortName.length === 0) {
-            this.setState({
-                error: "No todos los campos requeridos estan llenos"
-            });
-            return false;
-        }
-
-        if (this.state.editApp < 0) {
-            let appsOld = this.state.apps;
-            appsOld.push({
-                appID: this.state.appID,
-                appShortName: this.state.appShortName,
-                appTitle: this.state.appTitle,
-                appDescription: this.state.appDescription,
-                modified: false,
-                create: true
-            });
-
-            this.setState({
-                apps: appsOld,
-                showModalAddApp: false,
-                appID: "",
-                appShortName: "",
-                appTitle: "",
-                appDescription: "",
-                error: ""
-            })
-        }
-        else {
-            let appOld = this.state.apps[this.state.editApp];
-            appOld.appID = this.state.appID;
-            appOld.appShortName = this.state.appShortName;
-            appOld.appTitle = this.state.appTitle;
-            appOld.appDescription = this.state.appDescription;
-            appOld.modified = true;
-            appOld.create = false;
-
-            this.setState({
-                // apps: appsOld,
-                showModalAddApp: false,
-                appID: "",
-                appShortName: "",
-                appTitle: "",
-                appDescription: "",
-                editApp: -1,
-                error: ""
-            })
-        }
-
-    }
-
-    closeModal = () => {
-        this.setState({
-            error: "",
-            showModalAddApp: false
-        })
-    }
-
     setFirstName = (e) => {
         this.setState({
             firstName: e.target.value
@@ -209,26 +105,6 @@ class newUser extends React.Component {
         this.props.history.replace("/usuarios");
     }
 
-    fillModalWithAppInfo = (index) => {
-        let app = this.state.apps[index]
-        this.setState({
-            showModalAddApp: true,
-            appShortName: app.appShortName,
-            appName: app.appTitle,
-            appDescription: app.appDescription,
-            editApp: index
-        });
-    }
-
-    deleteThisApp = (indexApp) => {
-        let newApps = this.state.apps;
-        newApps.splice(indexApp, 1);
-        console.log(newApps);
-        this.setState({
-            apps: newApps
-        })
-    }
-
     onSubmitForm = (e) => {
         e.preventDefault();
         let createUser = true;
@@ -263,8 +139,7 @@ class newUser extends React.Component {
             let requestOptions = {};
             let APISaveUser = "";
             if (this.state.updateUser) {
-            APISaveUser = "http://localhost:2020/users/" + this.state._id;
-            console.log(APISaveUser);
+            APISaveUser = APISERVER + "users/" + this.state._id;
             requestOptions = {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
@@ -280,7 +155,7 @@ class newUser extends React.Component {
             };
             }
             else {
-            APISaveUser = "http://localhost:2020/users/create";
+            APISaveUser = APISERVER + "users/create";
             requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -353,80 +228,11 @@ class newUser extends React.Component {
                             </select>
                         </div>
                     </fieldset>
-                    {/* <fieldset>
-                        <legend>
-                            Aplicaciones
-                        </legend>
-                        <div className="pure-control-group appsButton">
-                            <button onClick={this.addAppHandler} id="addAppsButton" className="button-secondary pure-button"><img src={AddButton} /></button>
-                        </div>
-                        <table className="pure-table pure-table-horizontal">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Nombre corto</th>
-                                    <th>Nombre</th>
-                                    <th>Descripción</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {this.state.apps.length > 0 ? this.state.apps.map((app, indexApp) => {
-                                    return (
-                                        <tr key={indexApp}>
-                                            <td>{indexApp + 1}</td>
-                                            <td>{app.appShortName}</td>
-                                            <td>{app.appTitle}</td>
-                                            <td>{app.appDescription}</td>
-                                            <td>
-                                                <div className="actionsButtons">
-                                                    <img src={EditButton} className="editButton appsActionsButton" onClick={() => this.fillModalWithAppInfo(indexApp)} />
-                                                    <img src={DeleteButton} className="deleteButton appsActionsButton" onClick={() => this.deleteThisApp(indexApp)} />
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    )
-                                }) : <tr></tr>}
-                            </tbody>
-
-                        </table>
-                    </fieldset> */}
                     <div className="pure-control-group final-pure-control-group">
                         <input className="pure-button pure-button-primary" onClick={this.onSubmitForm} type="submit" value="GUARDAR" />
                         <input className="pure-button pure-button-danger" onClick={this.cancel} type="submit" value="CANCELAR" />
                     </div>
                 </form>
-                <CSSTransition
-                    in={this.state.showModalAddApp}
-                    timeout={200}
-                    classNames="fade-in"
-                    mountOnEnter
-                    unmountOnExit>
-                    <BackgroundShadow></BackgroundShadow>
-                </CSSTransition>
-                <CSSTransition in={this.state.showModalAddApp} timeout={600} classNames="slide-in-down" mountOnEnter unmountOnExit>
-                    <Modal closeModal={this.closeModal} header={
-                        <h1>AGREGAR NUEVA APLICACION</h1>
-                    } body={
-                        <form className="pure-form pure-form-aligned pure-u-1">
-                            <div className="pure-control-group">
-                                <label htmlFor="shortName">Nombre corto</label>
-                                <input className="pure-u-1-4" value={this.state.appShortName} onChange={this.setAppShortName} maxLength="25" type="text" id="shortName" />
-                            </div>
-                            <div className="pure-control-group">
-                                <label htmlFor="appName">nombre de la app</label>
-                                <input className="pure-u-1-4" value={this.state.appTitle} onChange={this.setAppName} maxLength="25" type="text" id="appName" />
-                            </div>
-                            <div className="pure-control-group">
-                                <label htmlFor="AppDescription">Descripción de la app</label>
-                                <textarea className="pure-u-3-4" value={this.state.appDescription} onChange={this.setAppDescription} maxLength="150" id="AppDescription"></textarea>
-                            </div>
-                        </form>
-                    } footer={
-                        <button className="pure-button pure-button-primary" onClick={() => this.addApp()}>AGREGAR</button>
-                    }></Modal>
-                </CSSTransition>
-
             </div>
         )
     }

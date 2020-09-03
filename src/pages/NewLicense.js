@@ -8,7 +8,10 @@ const usersAPI = APISERVER + "users/";
 
 const rolesAPI = APISERVER + "roles/";
 
-class NewApp extends React.Component {
+const appsAPI = APISERVER + "apps/";
+
+
+class NewLicense extends React.Component {
 
 
     constructor(props) {
@@ -17,10 +20,14 @@ class NewApp extends React.Component {
             showModalAddApp: false,
             error: "",
             users: [],
-            title: this.props.location?.state?._id?.length > 0 ? this.props.location.state.title : "",
-            shortName: this.props.location?.state?._id?.length > 0 ? this.props.location.state.shortName : "",
-            description: this.props.location?.state?._id?.length > 0 ? this.props.location.state.description : "",
-            user: this.props.location?.state?._id?.length > 0 ? this.props.location.state.userId : "",
+            apps: [],
+            licenseId: "",
+            licenseKey: "",
+            startDate: new Date(),
+            endDate: new Date(),
+            user: "",
+            app: "",
+            showAppsSelect: "display-none",
             updateApp: this.props.location?.state?._id?.length > 0 ? true : false,
             _id: this.props.location?.state?._id?.length > 0 ? this.props.location?.state?._id : false
         }
@@ -31,13 +38,13 @@ class NewApp extends React.Component {
         this.getUsers();
     }
 
-    getRoles = () => {
-        fetch(rolesAPI)
+    getAppsByUser = (userId) => {
+        fetch(appsAPI + "appsByUser/" + userId)
             .then((response) => {
                 return response.json()
-            }).then((rolesData) => {
+            }).then((appsData) => {
                 this.setState({
-                    roles: rolesData,
+                    apps: appsData,
                     isLoaded: true
                 })
             }, (error) => {
@@ -65,28 +72,46 @@ class NewApp extends React.Component {
             })
     }
 
-    setTitle = (e) => {
+    setLicenseId = (e) => {
         this.setState({
-            title: e.target.value
+            licenseId: e.target.value
         })
     }
 
-    setShortName = (e) => {
+    setLicenseKey = (e) => {
         this.setState({
-            shortName: e.target.value
+            licenseKey: e.target.value
         })
     }
 
-    setDescription = (e) => {
+    setStartDate = (e) => {
         this.setState({
-            description: e.target.value
+            startDate: e.target.value
+        })
+    }
+
+    setEndDate = (e) => {
+        this.setState({
+            endDate: e.target.value
         })
     }
 
     setUser = (e) => {
         this.setState({
-            user: e.target.value
-        })
+            user: e.target.value,
+            showAppsSelect: "display-initial"
+        });
+        setTimeout(() => {
+            console.log(this.state.user)
+            this.getAppsByUser(this.state.user);
+        },50);
+
+    }
+
+    setApp = (e) => {
+        this.setState({
+            app: e.target.value,
+        });
     }
 
 
@@ -148,7 +173,7 @@ class NewApp extends React.Component {
         return (
             <div className="newUserPage">
                 {this.state.error.length !== 0 ? <div className="error errorAnimation">{this.state.error}</div> : ""}
-                <h1>{this.state.title.length > 0 ? "EDITAR APLICACION" : "AGREGAR NUEVA APLICACION"}</h1>
+                <h1>AGREGAR NUEVA APLICACION</h1>
                 <form className="pure-form pure-form-aligned pure-u-1">
                     <fieldset>
                         <legend>Datos Personales</legend>
@@ -163,16 +188,36 @@ class NewApp extends React.Component {
                             </select>
                         </div>
                         <div className="pure-control-group">
-                            <label htmlFor="shortNameInput">Nombre Corto</label>
-                            <input type="text" id="shortNameInput" value={this.state.shortName} onChange={this.setShortName} maxLength="6" />
+                            <label htmlFor="users">Usuario</label>
+                            <select name="users" id="users" value={this.state.user} onChange={this.setUser}>
+                                {this.state.apps.map((user) => {
+                                    return(
+                                    <option key={user._id} value={user._id}>{`${user.name} ${user.lastName}`}</option>
+                                    )
+                                })}
+                            </select>
+                        </div>
+                        <div className={`pure-control-group ${this.state.showAppsSelect}`}>
+                            <label htmlFor="apps">Aplicación</label>
+                            <select name="apps" id="apps" value={this.state.app} onChange={this.setApp}>
+                                {this.state.apps.map((app) => {
+                                    return(
+                                    <option key={app._id} value={app._id}>{app.appName}</option>
+                                    )
+                                })}
+                            </select>
                         </div>
                         <div className="pure-control-group">
-                            <label htmlFor="titleInput">Nombre</label>
-                            <input className="pure-u-1-4" type="text" id="titleInput" value={this.state.title} onChange={this.setTitle} maxLength="25" />
+                            <label htmlFor="licenseId">Identificador Licencia</label>
+                            <input type="text" id="licenseId" value={this.state.licenseId} onChange={this.setLicenseId} maxLength="6" />
                         </div>
                         <div className="pure-control-group">
-                            <label htmlFor="descriptionInput">Descripcion</label>
-                            <textarea className="pure-u-3-4" type="text" id="descriptionInput" value={this.state.description} onChange={this.setDescription} maxLength="275"></textarea>
+                            <label htmlFor="startDate">Fecha de Inicio</label>
+                            <input className="pure-u-1-4" type="date" id="startDate" value={this.state.startDate} onChange={this.setStartDate} />
+                        </div>
+                        <div className="pure-control-group">
+                            <label htmlFor="endDate">Fecha de Fin</label>
+                            <input className="pure-u-1-4" type="date" id="endDate" value={this.state.endDate} onChange={this.setEndDate} />
                         </div>
                     </fieldset>
                     <div className="pure-control-group final-pure-control-group">
@@ -185,4 +230,4 @@ class NewApp extends React.Component {
     }
 }
 
-export default withRouter(NewApp)
+export default withRouter(NewLicense)

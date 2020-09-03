@@ -6,10 +6,11 @@ import Login from "./pages/login";
 import Error from "./pages/error";
 import MainLayout from './shared/MainLayout';
 import Home from './pages/home';
+import Licenses from './pages/licenses';
 import Users from './pages/users';
-import editUser from './pages/editUser';
 import NewUser from './pages/newUser';
 import NewApp from './pages/NewApp';
+import NewLicense from './pages/NewLicense';
 
 
 function App() {
@@ -30,11 +31,17 @@ function App() {
             <Route path="/aplicaciones/nueva" exact>
               <NewApp></NewApp>
             </Route>
+            <Route path="/licencias/nueva" exact>
+              <NewLicense></NewLicense>
+            </Route>
             <Route path="/error" exact>
               <Error></Error>
             </Route>
             <Route path="/home" exact>
               <Home></Home>
+            </Route>
+            <Route path="/licencias" exact>
+              <Licenses></Licenses>
             </Route>
             <Redirect to="/error" exact></Redirect>
           </Switch>

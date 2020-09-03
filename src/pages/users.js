@@ -1,29 +1,17 @@
 import React from 'react';
-import { withRouter, Link, Redirect } from 'react-router-dom';
-import { CSSTransition } from 'react-transition-group';
+import { withRouter, Link } from 'react-router-dom';
 
 import EditButton from '../assets/edit-button.png';
 import DeleteButton from '../assets/delete-button.png';
-import Modal from '../shared/Modal';
-import BackgroundShadow from '../shared/backgroundShadow';
-
-
+import APISERVER from "../../src/config";
 import './users.css';
 
-const API = "http://localhost:2020/users/";
-
-const APIEditThisUser = "http://localhost:2020/users/";
-
-const APIUsersByName = "http://localhost:2020/users/";
-
-let rolesAPI = "http://localhost:2020/roles/";
-
+const API = APISERVER + "users/";
+const APIEditThisUser = APISERVER + "users/";
+const APIUsersByName = APISERVER + "users/";
+let rolesAPI = APISERVER + "roles/";
 
 class Users extends React.Component {
-
-    // redirectToNewUser = () => {
-    //     this.props.history.replace("/usuarios/nuevo");
-    // }
 
     constructor(props) {
         super(props);
@@ -79,12 +67,6 @@ class Users extends React.Component {
             })
     }
 
-    closeModal = () => {
-        this.setState({
-            showModalAddUser: false
-        })
-    }
-
     getRoles = () => {
         fetch(rolesAPI)
             .then((response) => {
@@ -126,11 +108,6 @@ class Users extends React.Component {
             inputSearch: e.target.value
         });
     }
-    setTelephoneNumber = (e) => {
-        this.setState({
-            userTelephoneNumber: e.target.value
-        });
-    }
 
     onSubmitSearch = (e) => {
         e.preventDefault();
@@ -157,14 +134,11 @@ class Users extends React.Component {
     }
 
     render() {
-
         let userSession = localStorage.getItem("userLogin");
 
         if (userSession === null) {
             this.props.history.replace("/");
         }
-
-
 
         return (
             <div className="usersPage">

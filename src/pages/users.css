@@ -101,18 +101,6 @@ h2 {
     pointer-events: none;
 } */
 
-.cargando {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-    height: 20%;
-    width: 20%;
-
-}
-
 .lds-ellipsis {
     display: inline-block;
     position: relative;

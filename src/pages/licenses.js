@@ -4,15 +4,15 @@ import { withRouter, Link } from 'react-router-dom';
 import EditButton from '../assets/edit-button.png';
 import DeleteButton from '../assets/delete-button.png';
 import APISERVER from "../../src/config";
-import './home.css';
+import './licenses.css';
 
-const API = APISERVER + "apps/";
-const APIAppsByName = APISERVER + "apps/";
+const API = APISERVER + "licenses/";
+const APIAppsByName = APISERVER + "licenses/";
 let rolesAPI = APISERVER + "roles/";
-const APIApps = APISERVER + "apps/";
+const APIApps = APISERVER + "licenses/";
 
 
-class Home extends React.Component {
+class Licenses extends React.Component {
 
     constructor(props) {
         super(props);
@@ -159,9 +159,9 @@ class Home extends React.Component {
         return (
             <div className="appsPage">
                 {!this.state.isLoaded ? <div className="cargando"><div className="lds-ellipsis"><div></div><div></div><div></div><div></div></div></div> : ""}
-                <h2>Aplicaciones</h2>
+                <h2>Licencias</h2>
                 <div className="add_user">
-                    <Link to="/aplicaciones/nueva">
+                    <Link to="/licencias/nueva">
                         <button>+</button>
                     </Link>
                 </div>
@@ -213,4 +213,4 @@ class Home extends React.Component {
     }
 }
 
-export default withRouter(Home);
+export default withRouter(Licenses);

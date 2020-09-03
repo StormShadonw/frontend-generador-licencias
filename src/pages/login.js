@@ -1,6 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 
+import APISERVER from "../../src/config";
 import './login.css';
 import logo from '../assets/logo.png';
 
@@ -31,7 +32,7 @@ class Login extends React.Component {
         const email = this.state.email;
         const password = this.state.password;
         if (email.length > 1 || password.length > 1) {
-            fetch('http://localhost:2020/users/login/' + this.state.email + "/" + this.state.password)
+            fetch(APISERVER + 'users/login/' + this.state.email + "/" + this.state.password)
                 .then((response) => {
                     return response.json()
                 })
