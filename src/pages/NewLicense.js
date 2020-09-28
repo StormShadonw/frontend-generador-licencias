@@ -29,7 +29,8 @@ class NewLicense extends React.Component {
             app: "",
             showAppsSelect: "display-none",
             updateApp: this.props.location?.state?._id?.length > 0 ? true : false,
-            _id: this.props.location?.state?._id?.length > 0 ? this.props.location?.state?._id : false
+            _id: this.props.location?.state?._id?.length > 0 ? this.props.location?.state?._id : false,
+            codesCantity: 0
         }
     }
 
@@ -38,7 +39,14 @@ class NewLicense extends React.Component {
         this.getUsers();
     }
 
+    setCodesCantity = (e) => {
+        this.setState({
+            codesCantity: e.target.value
+        })
+    }
+
     getAppsByUser = (userId) => {
+        console.log(appsAPI + "appsByUser/" + userId)
         fetch(appsAPI + "appsByUser/" + userId)
             .then((response) => {
                 return response.json()
@@ -99,16 +107,13 @@ class NewLicense extends React.Component {
     setUser = (e) => {
         this.setState({
             user: e.target.value,
-            showAppsSelect: "display-initial"
+            showAppsSelect: "display-block"
         });
-        setTimeout(() => {
-            console.log(this.state.user)
-            this.getAppsByUser(this.state.user);
-        },50);
-
+        this.getAppsByUser(e.target.value);
     }
 
     setApp = (e) => {
+        console.log(e.target.value)
         this.setState({
             app: e.target.value,
         });
@@ -116,27 +121,48 @@ class NewLicense extends React.Component {
 
 
     cancel = () => {
-        this.props.history.replace("/home");
+        this.props.history.replace("/licencias");
     }
 
     onSubmitForm = (e) => {
         e.preventDefault();
-        let createApp = true;
+        let createLicense = true;
         this.setState({
             error: ""
         })
-        if (this.state.title.length === 0 || this.state.shortName.length === 0 || this.state.description.length === 0) {
-            createApp = false;
+        console.log(this.state.codesCantity,
+            this.state.user.length,
+            this.state.app.length,
+            this.state.licenseId.length,
+            this.state.startDate.length,
+            this.state.endDate.length)
+        if (this.state.codesCantity === 0 || this.state.user.length === 0 || this.state.app.length === 0 || this.state.licenseId.length === 0 || this.state.startDate.length === 0 || this.state.endDate.length === 0) {
+            createLicense = false;
             this.setState({
                 error: "Faltan campos requeridos por llenar."
             });
         }
-        if (createApp) {
+
+        if (this.state.startDate > this.state.endDate) {
+            createLicense = false;
+            this.setState({
+                error: "La fecha de inicio no puede ser mayor a la de fin."
+            });
+        }
+
+        if (this.state.codesCantity > 255) {
+            createLicense = false;
+            this.setState({
+                error: "La cantidad de codigos es muy alta, no puede ser mayor a 255 por licencia."
+            });
+        }
+
+        if (createLicense) {
             let requestOptions = {};
             let APISaveApp = "";
             console.log(this.state.description);
             if (this.state.updateApp) {
-            APISaveApp = APISERVER + "apps/" + this.state._id;
+            APISaveApp = APISERVER + "licenses/" + this.state._id;
             requestOptions = {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
@@ -150,21 +176,24 @@ class NewLicense extends React.Component {
             };
             }
             else {
-            APISaveApp = APISERVER + "apps/create";
+            APISaveApp = APISERVER + "licenses/create";
+            console.log(this.state.app);
             requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    appShortName: this.state.shortName,
-                    appTitle: this.state.title,
-                    appDescription: this.state.description,
-                    appUser: this.state.user
+                    app: this.state.app,
+                    licenseId: this.state.licenseId,
+                    startDate: this.state.startDate,
+                    endDate: this.state.endDate,
+                    licenseUser: this.state.user,
+                    codesCantity: this.state.codesCantity
                 })
             };
             }
             fetch(APISaveApp, requestOptions)
                 .then(response => response.json())
-                .then(data => this.props.history.replace("/home"));
+                .then(data => this.props.history.replace("/licencias"));
         }
 
     }
@@ -173,13 +202,14 @@ class NewLicense extends React.Component {
         return (
             <div className="newUserPage">
                 {this.state.error.length !== 0 ? <div className="error errorAnimation">{this.state.error}</div> : ""}
-                <h1>AGREGAR NUEVA APLICACION</h1>
+                <h1>GENERAR NUEVA LICENCIA</h1>
                 <form className="pure-form pure-form-aligned pure-u-1">
                     <fieldset>
                         <legend>Datos Personales</legend>
                         <div className="pure-control-group">
                             <label htmlFor="userInput">Usuario</label>
                             <select name="userInput" id="userInput" value={this.state.user} onChange={this.setUser}>
+                                <option key="default" value="default">Seleccione un Usuario</option>
                                 {this.state.users.map((user) => {
                                     return(
                                     <option key={user._id} value={user._id}>{user.name + " " + user.lastName}</option>
@@ -187,29 +217,21 @@ class NewLicense extends React.Component {
                                 })}
                             </select>
                         </div>
-                        <div className="pure-control-group">
-                            <label htmlFor="users">Usuario</label>
-                            <select name="users" id="users" value={this.state.user} onChange={this.setUser}>
-                                {this.state.apps.map((user) => {
-                                    return(
-                                    <option key={user._id} value={user._id}>{`${user.name} ${user.lastName}`}</option>
-                                    )
-                                })}
-                            </select>
-                        </div>
                         <div className={`pure-control-group ${this.state.showAppsSelect}`}>
                             <label htmlFor="apps">Aplicación</label>
                             <select name="apps" id="apps" value={this.state.app} onChange={this.setApp}>
+                                <option key='default' value='default'>Seleccione una App</option>
                                 {this.state.apps.map((app) => {
+                                    console.log(this.state.apps)
                                     return(
-                                    <option key={app._id} value={app._id}>{app.appName}</option>
+                                    <option key={app._id} value={app._id}>{app.appTitle}</option>
                                     )
                                 })}
                             </select>
                         </div>
                         <div className="pure-control-group">
                             <label htmlFor="licenseId">Identificador Licencia</label>
-                            <input type="text" id="licenseId" value={this.state.licenseId} onChange={this.setLicenseId} maxLength="6" />
+                            <input type="text" id="licenseId" value={this.state.licenseId} onChange={this.setLicenseId} maxLength="12" />
                         </div>
                         <div className="pure-control-group">
                             <label htmlFor="startDate">Fecha de Inicio</label>
@@ -219,9 +241,13 @@ class NewLicense extends React.Component {
                             <label htmlFor="endDate">Fecha de Fin</label>
                             <input className="pure-u-1-4" type="date" id="endDate" value={this.state.endDate} onChange={this.setEndDate} />
                         </div>
+                        <div className="pure-control-group">
+                            <label htmlFor="codesCantity">Cantidad de equipos</label>
+                            <input className="pure-u-1-4" type="number" max="255" id="codesCantity" value={this.state.codesCantity} onChange={this.setCodesCantity} />
+                        </div>
                     </fieldset>
                     <div className="pure-control-group final-pure-control-group">
-                        <input className="pure-button pure-button-primary" onClick={this.onSubmitForm} type="submit" value="GUARDAR" />
+                        <input className="pure-button pure-button-primary" onClick={this.onSubmitForm} type="submit" value="GENERAR" />
                         <input className="pure-button pure-button-danger" onClick={this.cancel} type="submit" value="CANCELAR" />
                     </div>
                 </form>

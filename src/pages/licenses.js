@@ -101,17 +101,20 @@ class Licenses extends React.Component {
             })
     }
 
-    editApp = (appId, userId) => {
-        let app = this.state.apps.filter(app => app._id == appId);
+    editApp = (licenseId, userId) => {
+        let app = this.state.apps.filter(license => license._id == licenseId);
         this.props.history.push({
-            pathname: '/aplicaciones/nueva',
+            pathname: '/licencias/editar',
             state: {
                 _idUser: app[0].appUser,
                 _id: app[0]._id,
-                title: app[0].appTitle,
-                shortName: app[0].appShortName,
-                description: app[0].appDescription,
-                userId: app[0].appUser
+                licenseId: app[0].licenseId,
+                cantity: app[0].cantity,
+                startDate: app[0].startDate,
+                endDate: app[0].endDate,
+                appId: app[0].appUser,
+                app:app[0].app,
+                userName: app[0].userFirstName + " " + app[0].userLastName
             }
         })
     }
@@ -133,7 +136,7 @@ class Licenses extends React.Component {
     }
 
     deleteThisApp = (userId) => {
-        let sure = window.confirm("Seguro que desea eliminar esta aplicación?");
+        let sure = window.confirm("Seguro que desea eliminar esta licencia?");
         if (sure) {
             fetch(API + "/delete/" + userId, {
                 method: "put"
@@ -153,6 +156,7 @@ class Licenses extends React.Component {
 
     render() {
         let userSession = localStorage.getItem("userLogin");
+        console.log(userSession);
         if (userSession === null) {
             this.props.history.replace("/");
         }
@@ -175,26 +179,34 @@ class Licenses extends React.Component {
                         <thead>
                             <tr>
                                 {/* <th>#</th> */}
-                                <th>Nombre corto</th>
-                                <th>Nombre</th>
-                                <th>Descripción</th>
+                                <th>ID Licencia</th>
+                                <th>App licenciada</th>
                                 <th>Usuario</th>
-                                <th>Tiene licencia?</th>
+                                <th>Cantidad Total</th>
+                                <th>Cantidad usada</th>
+                                <th>Fecha inicio</th>
+                                <th>Fecha final</th>
+                                <th>dias faltantes</th>
+                                <th>fecha creada</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             {
                                 this.state.apps.map((app, indexApp) => {
+                                console.log(this.state.apps)
                                     return (
                                         <tr key={app._id}>
                                             {/* <td>{this.state.indexApps}</td> */}
-                                            <td>{app.appShortName}</td>
-                                            <td>{app.appTitle}</td>
-                                            <td>{app.appDescription}</td>
+                                            <td>{app.licenseId}</td>
+                                            <td>{app.app[0]?.appTitle}</td>
                                             <td>{app.userFirstName + " " + app.userLastName}</td>
-                                            <td>{app.licenseCode > 0 ? "si" : "no"}</td>
-                                            {/* <td>{app?.licenseCode.length > 0 ? "si tiene" : "no tiene"}</td> */}
+                                            <td>{app.cantity}</td>
+                                            <td>{app.cantityUsed}</td>
+                                            <td>{new Date(new Date(app.startDate).getTime() + (1000*60*60*24)).toLocaleDateString()}</td>
+                                            <td>{new Date(new Date(app.endDate).getTime() + (1000*60*60*24)).toLocaleDateString()}</td>
+                                            <td>{(new Date() >= new Date(app.startDate) ? Math.ceil((new Date(app.endDate) - new Date()) / (1000*60*60*24)) : (new Date(app.endDate) - new Date(app.startDate)) / (1000*60*60*24) )}</td>
+                                            <td>{new Date(app.createdDate).toLocaleDateString()}</td>
                                             <td>
                                                 <div className="actionsButtons">
                                                     <img src={EditButton} className="editButton usersActionsButton" onClick={() => this.editApp(app._id, app.appUser)} />

@@ -129,3 +129,7 @@ body * {
 .display-initial {
   display: initial;
 }
+
+.display-block {
+  display: block;
+}

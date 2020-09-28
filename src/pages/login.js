@@ -32,24 +32,33 @@ class Login extends React.Component {
         const email = this.state.email;
         const password = this.state.password;
         if (email.length > 1 || password.length > 1) {
-            fetch(APISERVER + 'users/login/' + this.state.email + "/" + this.state.password)
+            const APISaveApp = APISERVER + 'users/login';
+            const requestOptions = {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userEmail: this.state.email,
+                    userPassword: this.state.password
+                })
+            };
+            fetch(APISaveApp, requestOptions)
                 .then((response) => {
                     return response.json()
                 })
                 .then((user) => {
-                    if (user != null) {
+                    console.log(user);
+                    if (user != null && Object.entries(user).length > 0) {
                         this.setState({
                             passwordInvalid: "",
                             emailInvalid: "",
                             error: ""
                         });
-                        let user = {
+                        let userLoged = {
                             user: email,
-                            password: password,
-                            perfil: "admin"
+                            role: user.role 
                         }
                         document.getElementsByTagName("body")[0].className = "background2";
-                        localStorage.setItem("userLogin", JSON.stringify(user));
+                        localStorage.setItem("userLogin", JSON.stringify(userLoged));
                         this.props.history.replace("/home");
                     }
                     else {

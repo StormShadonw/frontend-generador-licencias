@@ -11,6 +11,9 @@ import Users from './pages/users';
 import NewUser from './pages/newUser';
 import NewApp from './pages/NewApp';
 import NewLicense from './pages/NewLicense';
+import EditLicense from './pages/editLicense';
+import UsersConfiguration from './pages/usersConfiguration';
+import ResetPassword from './pages/resetPassword';
 
 
 function App() {
@@ -21,6 +24,12 @@ function App() {
           <Switch>
             <Route path="/" exact>
               <Login></Login>
+            </Route>
+            <Route path="/cambiar-contraseñas" exact>
+              <UsersConfiguration></UsersConfiguration>
+            </Route>
+            <Route path="/recuperar-contraseña" exact>
+              <ResetPassword></ResetPassword>
             </Route>
             <Route path="/usuarios" exact>
               <Users></Users>
@@ -33,6 +42,9 @@ function App() {
             </Route>
             <Route path="/licencias/nueva" exact>
               <NewLicense></NewLicense>
+            </Route>
+            <Route path="/licencias/editar" exact>
+              <EditLicense></EditLicense>
             </Route>
             <Route path="/error" exact>
               <Error></Error>
